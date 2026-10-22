@@ -1,7 +1,202 @@
 ---
-title: "test"
-format: html
-editor: visual
+title: "My Personal Quarto Cheat Sheet"
+author: Mädchen Gebhard
+date: today
+format: 
+  html:
+    theme: vapor
+    toc: true
+    number-sections:  true
+    code-fold: show
+    bibliography: references.bib
 ---
 
-testing website
+# Section headers
+
+``` markdown
+testing
+```
+
+## Headers
+
+### Level 3 Header
+
+#### Level 4 Header
+
+##### Level 5 Header
+
+###### Level 6 Header
+
+# Text Formatting
+
+**wrap text in double asterisks to bold**
+
+*wrap text in single asterisks to italicize*
+
+***wrap text in triple to bold and italicize***
+
+~~wrap text in double tildes to strikethrough~~
+
+``` markdown
+
+wrap inline rcode in single backticks to code...
+2 + 2 + 2 + = `\{r} 2 + 2 + 2` *backslash is not needed, only used here to print
+```
+
+2 + 2 + 2 + = `\{r} 2 + 2 + 2`
+
+# Ordered and numbered lists
+
+## Unordered List
+
+``` markdown
+- Item 1
+- Item 2
+    -Sub-item 2a (indent with 2 or 4 spaces)
+    -Sub-item 2b
+```
+
+-   Item 1
+-   Item 2
+    -   Sub-item 2a
+    -   Sub-item 2b
+
+1.  First Step
+2.  Second step
+
+<!-- -->
+
+i)  Sub-step with Roman numerals
+
+<!-- -->
+
+3.  Third step
+
+<!-- -->
+
+i)  Another child item
+
+# Hyperlinks
+
+``` markdown
+create a hyperlink using brackets for the text and parentheses for the URL address
+[Quarto Documentation](https://quarto.org)
+```
+
+# Tabsets
+
+``` markdown
+wrap the set of ehaders you want as tabsets with triple :::
+(this is called a fence)
+```
+
+:::: panel-tabset
+\*opening fence with panel-tabset option
+
+## Tab 1
+
+This is the content for the first tab.
+
+## Tab 2
+
+::: panel-tabset
+### Nested Tab 1
+
+Content for nested tab 1
+
+### Nested Tab 2
+
+Content for nested tab 2
+:::
+::::
+
+# Loading libraries & Reading in data
+
+This should be done at the top of your quarto doc, after YAML.
+
+```{r}
+#| label: setup
+#| message: false
+#| warning: false
+#| echo: fenced
+    
+# load your libraries
+library(tidyverse)
+library(knitr)
+library(readxl)
+
+# reading in data
+# example: mydata <- read.csv("path/to/data.csv")
+
+my_data <- mtcars
+my_real_data <- read_excel("~/Downloads/TCRMP_SiteMetadata.xlsx")
+# the ~/ tab went to my computer directory, a double period (../ tab) would take me to my project directory
+
+head(my_real_data)
+```
+
+# inserting figures and figure captions
+
+```{r}
+#| label: fig-mpg
+#| fig-cap: "Scatterplot of Car Weight vs. MPG"
+
+ggplot(my_data, aes(x = wt, y = mpg))+
+  geom_point() +
+  theme_minimal() +
+  labs(x = "weight", y = "miles per gallon")
+```
+
+::: callout-tip
+## Tip
+
+notice how we labeled figure above with option #\| labes: fig-mpg we can then reference figure in our text as shown in @fig-mpg, heavier cars have lower mpg.
+:::
+
+#Table outputs
+
+```{r}
+#| label: tbl-summary
+#| tbl-cap: "average mpg by cylinder count" 
+#| echo: fenced
+
+my_data %>% 
+  group_by(cyl) %>% 
+  summarise(avg_mpg = mean(mpg)) %>% 
+  kable() #kable makes a clean markdown table
+```
+
+::: callout-tip
+## Tip
+
+this time we labeled the table above with the option #\| label: tbl-summary
+
+we can reference in our text.
+
+Please refer to @tbl-summary for the exact averages.
+
+# Inserting images
+
+![](Zippo.jpeg){.lightbox fig-align="center"}
+
+# Formulas with LaTeX
+
+insert inline math equations with a single dollar sign: $y = mx + b$
+
+for centered display equations, use double dollar signs: $$E = mc^2$$
+
+# Common example equations
+
+1.  Fractions $$
+    \frac{1.5}{23}
+    $$
+2.  Super and Sub Scripts $$
+    Y = x_1 + x_2
+    $$ $$
+    Y = x^1 + x^2
+    $$
+
+# Citations
+
+[@smith2013]
+:::
